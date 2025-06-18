@@ -1,0 +1,27 @@
+clc;
+clear all;
+
+% Parameters
+l = 1725;            % Wheelbase of the car (in mm)
+a = 0.4*l;             % Distance from CG to rear axle (in mm)
+w = 1585;       % Track width of the car (in mm)
+r = 2500:10:3500;    % Turning radius values (in mm)
+
+% Preallocate arrays
+Cotdi = zeros(size(r));
+di = zeros(size(r));
+did = zeros(size(r));
+
+% Loop to calculate inner wheel steering angle
+for i = 1:length(r)
+    Cotdi(i) = sqrt(((r(i)^2) - a^2) / l^2) - (w / (2 * l));
+    di(i) = acot(Cotdi(i));                  % In radians
+    did(i) = di(i) * (180 / pi);             % Convert to degrees
+end
+
+% Plotting
+plot(r, did, 'LineWidth', 2);
+title('Inner Wheel Steering Angle vs. Turning Radius');
+xlabel('Turning Radius (mm)');
+ylabel('Inner Wheel Angle (degrees)');
+grid on;

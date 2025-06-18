@@ -1,0 +1,27 @@
+clc;
+clear all;
+
+% Parameters
+l = 1725;            % Wheelbase of the car (in mm)
+a = 0.4*l;             % Distance from CG to rear axle (in mm)
+w = 1585;       % Track width of the car (in mm)
+r = 2500:10:3500;    % Turning radius values (in mm)
+
+% Preallocate arrays
+Cotdo = zeros(size(r));
+do = zeros(size(r));
+dod = zeros(size(r));
+
+% Loop to calculate outer wheel steering angle
+for i = 1:length(r)
+    Cotdo(i) = sqrt(((r(i)^2) - a^2) / l^2) + (w / (2 * l));
+    do(i) = acot(Cotdo(i));                  % In radians
+    dod(i) = do(i) * (180 / pi);             % Convert to degrees
+end
+
+% Plotting
+plot(r, dod, 'LineWidth', 2);
+title('Outer Wheel Steering Angle vs. Turning Radius');
+xlabel('Turning Radius (mm)');
+ylabel('Outer Wheel Angle (degrees)');
+grid on;

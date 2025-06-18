@@ -1,0 +1,30 @@
+clc;
+clear all;
+
+% Parameters
+g = 800;             % Distance from front-most part to front axle (in mm)
+l = 1725;            % Wheelbase of the car (in mm)
+w = 1585;              % Track width of the car (in mm)
+r = 4500:10:5625;      % Turning radius (in mm)   -> 4625 = Turning radius for skidpad
+a = 0.4*l;             % Distance from CG to rear axle (in mm)
+
+% Preallocate arrays
+di = zeros(size(r));    % Inner wheel angle (radians)
+x = zeros(size(r));     % Horizontal component of vehicle's front overhang path
+y = l + g;              % Constant vertical distance
+dr = zeros(size(r));    % Extra turning space required
+
+% Calculate space required
+for i = 1:length(r)
+    Cotdi = sqrt((r(i)^2 - (a)^2) / l^2) - (w / (2 * l)); 
+    di(i) = acot(Cotdi);                                     % Inner wheel angle (radians)
+    x(i) = (l / tan(di(i))) + 1.2*w;                         % Horizontal path width
+    dr(i) = sqrt(x(i)^2 + y^2) - (l / tan(di(i)));           % Extra clearance
+end
+
+% Plotting
+plot(r, dr, 'LineWidth', 2);
+title('Turning Space Required vs. Turning Radius');
+xlabel('Turning Radius (mm)');
+ylabel('Extra Turning Space Required (mm)');
+grid on;
